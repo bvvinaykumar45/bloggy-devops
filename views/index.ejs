@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Blog list</title>
+  </head>
+  <body>
+    <h1>Blog Posts</h1>
+    <ul>
+      <% for( let blog of blogs) { %>
+        <li>
+          <h2>
+            <%= blog.title %>
+          </h2>
+          <p>
+            <%= blog.description %>
+          </p>
+        </li>
+      <% } %>
+    </ul>
+    <div>
+      <h4>version: <%= version %>, served by: <%= host %></h4>
+    </div>
+  </body>
+</html>
