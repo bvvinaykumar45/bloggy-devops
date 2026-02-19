@@ -5,7 +5,7 @@
   "main": "src/index.ts",
   "type": "module",
   "scripts": {
-    "build": "tsc && cp -R views dist/views",
+    "build": "rm -rf dist && tsc && cp -R views dist/views",
     "dev": "tsx --watch ./index.ts",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "lint": "npx eslint .",
