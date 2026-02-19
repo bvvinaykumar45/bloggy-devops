@@ -3,5 +3,5 @@ export const getVersion = (): string => {
 }
 
 export const getHostName = (): string => {
-  return 'Batman';
+  return 'Super Batman';
 }
