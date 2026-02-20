@@ -7,12 +7,16 @@ on:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     env:
       IMAGE_NAME: vinaykumar45/blog-app
       IMAGE_TAG: build-${{github.run_number}}
     steps:
       - name: Checkout the source code
         uses: actions/checkout@v4
+        with:
+          persist-credentials: true
       - name: Build docker image
         run: docker build -t ${{env.IMAGE_NAME}}:${{env.IMAGE_TAG}} --platform linux/amd64 .
       - name: Login into Docker Hub
@@ -22,3 +26,44 @@ jobs:
           password: ${{secrets.DOCKERHUB_PASSWORD}}
       - name: Push docker image to Docker Hub
         run: docker push ${{env.IMAGE_NAME}}:${{env.IMAGE_TAG}}
+      - name: Update compose.yaml
+        uses: fjogeleit/yaml-update-action@main
+        with:
+          valueFile: compose.yaml
+          propertyPath: 'services["blog-server"].image'
+          value: ${{env.IMAGE_NAME}}:${{env.IMAGE_TAG}}
+          commitChange: false
+      - name: Commit the changes
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit -m "Bump the image version ${{env.IMAGE_TAG}}"
+          git push
+
+  deploy-the-image:
+    name: Deploy the image to Docker Swarm Cluster
+    runs-on: ubuntu-latest
+    env:
+      IMAGE_NAME: vinaykumar45/blog-app
+      IMAGE_TAG: build-${{github.run_number}}
+    needs:
+      - build-and-push
+    steps:
+      - name: SSH into the server
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{secrets.SWARM_MANAGER_HOST}}
+          username: ${{secrets.SWARM_HOST_USERNAME}}
+          key: ${{secrets.SWARM_HOST_SSH_KEY}}
+          port: ${{secrets.SWARM_HOST_SSH_PORT}}
+          script: |
+            set -e
+            cd ~/bloggy
+
+            # pull compose file using git
+            git fetch origin main
+            git checkout origin/main
+
+            docker pull ${{env.IMAGE_NAME}}:${{env.IMAGE_TAG}}
+            docker stack deploy -c compose.yaml bloggystack
