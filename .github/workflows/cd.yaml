@@ -11,7 +11,7 @@ jobs:
       contents: write
     env:
       IMAGE_NAME: vinaykumar45/blog-app
-      IMAGE_TAG: build-${{github.run_number}}
+      IMAGE_TAG: build-${{github.sha}}
     steps:
       - name: Checkout the source code
         uses: actions/checkout@v4
@@ -46,7 +46,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       IMAGE_NAME: vinaykumar45/blog-app
-      IMAGE_TAG: build-${{github.run_number}}
+      IMAGE_TAG: build-${{github.sha}}
     needs:
       - build-and-push
     steps:
