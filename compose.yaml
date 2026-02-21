@@ -29,7 +29,7 @@ services:
     networks:
       - blog-app-net
   blog-server:
-    image: vinaykumar45/blog-app:build-0ed20629c6f088497c8c8368af2158960a62bb4e
+    image: vinaykumar45/blog-app:build-1fbdff8e6369cb0f8739a38a5f6e8f84a179e48b
     deploy:
       replicas: 1
       update_config:
