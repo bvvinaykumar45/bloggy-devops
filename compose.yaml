@@ -31,7 +31,7 @@ services:
   blog-server:
     image: vinaykumar45/blog-app:build-2
     deploy:
-      replicas: 2
+      replicas: 1
       update_config:
         order: start-first
         failure_action: rollback
