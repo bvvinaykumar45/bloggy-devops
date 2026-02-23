@@ -1,6 +1,6 @@
 #syntax=docker/dockerfile:1
 
-FROM node:22-alpine AS builder
+FROM node:22-slim AS builder
 
 WORKDIR /app
 
@@ -12,11 +12,11 @@ RUN npm run build
 
 RUN npm prune --omit-dev
 
-FROM node:22-alpine AS runner
+FROM node:22-slim AS runner
 
 WORKDIR /app
 
-RUN apk add --no-cache wget
+RUN apt-get update && apt-get install -y wget && rm -rf /var/lib/apt/lists/*
 
 COPY --from=builder /app/dist ./
 COPY --from=builder /app/node_modules ./node_modules
@@ -25,8 +25,8 @@ RUN chmod +x /usr/local/bin/wait-for-it.sh
 
 EXPOSE 3000
 
-RUN adduser -D appuser
+RUN useradd -m appuser
 USER appuser
 
-ENTRYPOINT [ "wait-for-it.sh" ]
+ENTRYPOINT [ "wait-for-it.sh", "blog-db:3306", "--" ]
 CMD ["node", "index.js"]
