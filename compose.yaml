@@ -31,7 +31,7 @@ services:
     secrets:
       - db_password
   blog-server:
-    image: vinaykumar45/blog-app:build-eb0acaede1cb7114ddf2cc60e36bc3de17a51028
+    image: vinaykumar45/blog-app:build-f770044a2572fa7f2e977c7ef8228a8890c710d7
     deploy:
       replicas: 1
       update_config:
@@ -69,7 +69,6 @@ volumes:
   blog-db-vol: null
 networks:
   blog-app-net: null
-
 secrets:
   db_password:
     external: true
