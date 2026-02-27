@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import mysql from "mysql2/promise";
 import { getVersion, getHostName } from "./utils/index.js";
 import path from "path";
+import fs from "fs";
 import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -15,8 +16,16 @@ const app: Application = express();
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
-const dbUser = process.env.DB_USER;
-const dbPassword = process.env.DB_PASSWORD;
+let dbUser = process.env.DB_USER;
+let dbPassword = process.env.DB_PASSWORD;
+
+if(!dbUser && process.env.DB_USER_FILE) {
+  dbUser = fs.readFileSync(process.env.DB_USER_FILE, 'utf-8').trim();
+}
+
+if(!dbPassword && process.env.DB_PASSWORD_FILE) {
+  dbPassword = fs.readFileSync(process.env.DB_PASSWORD_FILE, 'utf-8').trim();
+}
 
 const pool = mysql.createPool({
   host: process.env.DB_HOST,
