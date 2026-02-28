@@ -39,7 +39,7 @@ jobs:
       - name: Push Changes
         uses: ad-m/github-push-action@master
         with:
-          github-token: ${{steps.generate_token.outputs.token}}
+          github_token: ${{steps.generate_token.outputs.token}}
       - name: Build docker image
         run: docker build -t ${{env.IMAGE_NAME}}:${{env.IMAGE_TAG}} --platform linux/amd64 .
       - name: Login into Docker Hub
