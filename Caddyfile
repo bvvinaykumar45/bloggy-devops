@@ -1,0 +1,7 @@
+{
+  email: bvvinaykumar45@gmail.com
+}
+
+bloggy-devops.buzz {
+  reverse_proxy blog-server:3000
+}
