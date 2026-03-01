@@ -3,6 +3,9 @@ services:
     image: vinaykumar45/my-custom-sql
     deploy:
       replicas: 1
+      placement:
+        constraints:
+          - node.labels.dbhome == true
       update_config:
         order: start-first
         failure_action: rollback
