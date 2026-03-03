@@ -34,7 +34,7 @@ services:
     secrets:
       - db_password
   blog-server:
-    image: vinaykumar45/blog-app:build-a5eea43f041f38c118fe640ab3c93ae97a4fe87b
+    image: vinaykumar45/blog-app:build-09886a8f3de05b32c9acb271bcf7f53bb313987b
     deploy:
       replicas: 1
       update_config:
@@ -98,12 +98,9 @@ services:
       - MYSQL_PASS_FILE=/run/secrets/db_password
       - MAX_BACKUPS=5
       - INIT_BACKUP=1
-      # Every minute of every day
       - CRON_TIME=* * * * *
-      # Make it small
       - GZIP_LEVEL=9
       - EXIT_BACKUP=1
-      # - INIT_RESTORE_LATEST=1
     volumes:
       - mysql_backup:/backup
     deploy:
