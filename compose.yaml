@@ -127,6 +127,7 @@ volumes:
   blog-db-vol: null
   caddy-data: null
   caddy-config: null
+  mysql_backup: null
 networks:
   blog-app-net: null
 secrets:
